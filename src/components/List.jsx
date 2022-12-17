@@ -13,31 +13,49 @@ const updateTask = (setIsModalOpen, setModalType, setTaskId, taskId) => {
   setTaskId(taskId);
 };
 
+const handleCheckBox = (checked, item, list, setList) => {
+  item.status = checked ? "completed" : "incomplete";
+  setList([...list]);
+};
+
 const List = ({ list, setList, setIsModalOpen, setModalType, setTaskId }) => {
   return (
     !!list.length && (
       <div>
-        {list.map(({ title, id, date }) => {
+        {list.map((item) => {
           return (
-            <div key={id} className="task-container">
+            <div key={item.id} className="task-container">
               <div className="task">
-                <input type="checkbox" />
+                <input
+                  checked={item.status === 'completed'? 'checked' : ''}
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleCheckBox(e.target.checked, item, list, setList)
+                  }
+                />
                 <div className="task-details">
-                  <h4>{title}</h4>
-                  <span>{date}</span>
+                  <h4 className={item.status}>{item.title}</h4>
+                  <span>{item.date}</span>
                 </div>
               </div>
               <div className="task-buttons">
                 <div
                   className="icon-container"
-                  onClick={() => removeTask(setList, list, id)}
+                  onClick={() => removeTask(setList, list, item.id)}
                 >
                   <TrashIcon className="icon" />
                 </div>
                 <div className="icon-container">
                   <PenIcon
                     className="icon"
-                    onClick={() => updateTask(setIsModalOpen, setModalType, setTaskId, id)}
+                    onClick={() =>
+                      updateTask(
+                        setIsModalOpen,
+                        setModalType,
+                        setTaskId,
+                        item.id
+                      )
+                    }
                   />
                 </div>
               </div>
