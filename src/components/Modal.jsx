@@ -17,7 +17,7 @@ const ModalInputField = ({ handleInput, taskName }) => (
   </div>
 );
 
-const ModalSelectField = ({ handleInput }) => (
+const ModalSelectField = ({ handleInput, taskStatus }) => (
   <div className="modal-input">
     <label htmlFor="" className="modal-label">
       Status
@@ -26,10 +26,12 @@ const ModalSelectField = ({ handleInput }) => (
       className="modal-input"
       type="text"
       name="status"
-      onChange={(e) => handleInput(e.target.value)}
+      onChange={(e) => {
+        handleInput(e.target.value)}}
+        defaultValue={taskStatus || "incomplete"}
     >
-      <option>Incomplete</option>
-      <option>Complete</option>
+      <option value="completed">completed</option>
+      <option value="incomplete">incomplete</option>
     </select>
   </div>
 );
@@ -73,6 +75,7 @@ const modalTypeMapping = {
   },
 };
 
+const getFormattedDate = (date) => new Date(date).toDateString()
 
 const Modal = ({ isModalOpen, setIsModalOpen, setList, list, type, taskId }) => {
   const [title, setTitle] = useState("");
@@ -80,7 +83,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, setList, list, type, taskId }) => 
   const id = uuid();
 
   const taskToUpdate = list.find((task) => task.id === taskId) || {}
-  const newTask = {title, status, id}
+  const newTask = {title, status, id, date: getFormattedDate(Date.now())}
 
   const handlerArguments = {
     add: {
@@ -98,7 +101,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, setList, list, type, taskId }) => 
           <CloseButton setIsModalOpen={setIsModalOpen} />
           <h2 className="modal-title">{modalTypeMapping[type].title}</h2>
           <ModalInputField handleInput={setTitle} taskName={type==='edit' && taskToUpdate.title}/>
-          <ModalSelectField handleInput={setStatus} />
+          <ModalSelectField handleInput={setStatus} taskStatus={type==='edit' && taskToUpdate.status}/>
           <div className="modal-buttons">
             <Button
               text={modalTypeMapping[type].buttonText}
