@@ -13,12 +13,14 @@ const updateTask = (setIsModalOpen, setModalType, setTaskId, taskId) => {
   setTaskId(taskId);
 };
 
-const handleCheckBox = (checked, item, list, setList) => {
+const handleCheckBox = (checked, item, list, setList, setStatus) => {
   item.status = checked ? "completed" : "incomplete";
+  setStatus(checked ? "completed" : "incomplete")
   setList([...list]);
 };
 
-const List = ({ list, setList, setIsModalOpen, setModalType, setTaskId }) => {
+const List = ({ list, setList, setIsModalOpen, setModalType, setTaskId,
+  setStatus }) => {
   return (
     !!list.length && (
       <div>
@@ -27,10 +29,10 @@ const List = ({ list, setList, setIsModalOpen, setModalType, setTaskId }) => {
             <div key={item.id} className="task-container">
               <div className="task">
                 <input
-                  checked={item.status === 'completed'? 'checked' : ''}
+                  checked={item.status === "completed" ? "checked" : ""}
                   type="checkbox"
                   onChange={(e) =>
-                    handleCheckBox(e.target.checked, item, list, setList)
+                    handleCheckBox(e.target.checked, item, list, setList, setStatus)
                   }
                 />
                 <div className="task-details">

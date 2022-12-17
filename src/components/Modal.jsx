@@ -17,24 +17,25 @@ const ModalInputField = ({ handleInput, taskName }) => (
   </div>
 );
 
-const ModalSelectField = ({ handleInput, taskStatus }) => (
-  <div className="modal-input">
-    <label htmlFor="" className="modal-label">
-      Status
-    </label>
-    <select
-      className="modal-input"
-      type="text"
-      name="status"
-      onChange={(e) => {
-        handleInput(e.target.value)}}
-        defaultValue={taskStatus || "incomplete"}
-    >
-      <option value="completed">completed</option>
-      <option value="incomplete">incomplete</option>
-    </select>
-  </div>
-);
+const ModalSelectField = ({ handleInput, status }) => {
+  return (
+    <div className="modal-input">
+      <label htmlFor="" className="modal-label">
+        Status
+      </label>
+      <select
+        defaultValue={status}
+        className="modal-input"
+        type="text"
+        name="status"
+        onChange={(e) => handleInput(e.target.value)}
+      >
+        <option value="incomplete">incomplete</option>
+        <option value="completed">completed</option>
+      </select>
+    </div>
+  );
+};
 
 const CloseButton = ({ setIsModalOpen }) => (
   <span
@@ -48,17 +49,17 @@ const CloseButton = ({ setIsModalOpen }) => (
 );
 
 const closeModal = (setIsModalOpen) => {
-  setIsModalOpen(false)
-}
+  setIsModalOpen(false);
+};
 
-const updateTask = ({title, status, taskToUpdate, setIsModalOpen}) => {
-  taskToUpdate.title = title
-  taskToUpdate.status = status
-  closeModal(setIsModalOpen)
-}
+const updateTask = ({ title, status, taskToUpdate, setIsModalOpen }) => {
+  taskToUpdate.title = title;
+  taskToUpdate.status = status;
+  closeModal(setIsModalOpen);
+};
 
-const addTask = ({setIsModalOpen, list, setList, newTask}) => {
-  closeModal(setIsModalOpen)
+const addTask = ({ setIsModalOpen, list, setList, newTask }) => {
+  closeModal(setIsModalOpen);
   setList([newTask].concat(list));
 };
 
@@ -66,46 +67,68 @@ const modalTypeMapping = {
   add: {
     title: "add todo",
     buttonText: "add task",
-    handler: addTask
+    handler: addTask,
   },
   edit: {
     title: "update todo",
     buttonText: "update task",
-    handler: updateTask
+    handler: updateTask,
   },
 };
 
-const getFormattedDate = (date) => new Date(date).toDateString()
+const getFormattedDate = (date) => new Date(date).toDateString();
 
-const Modal = ({ isModalOpen, setIsModalOpen, setList, list, type, taskId }) => {
+const Modal = ({
+  isModalOpen,
+  setIsModalOpen,
+  setList,
+  list,
+  type,
+  taskId,
+  status,
+  setStatus
+}) => {
+  
+  const taskToUpdate = list.find((task) => task.id === taskId) || {};
   const [title, setTitle] = useState("");
-  const [status, setStatus] = useState("incomplete");
   const id = uuid();
-
-  const taskToUpdate = list.find((task) => task.id === taskId) || {}
-  const newTask = {title, status, id, date: getFormattedDate(Date.now())}
+  const newTask = { title, status, id, date: getFormattedDate(Date.now()) };
 
   const handlerArguments = {
     add: {
-      setIsModalOpen, list, setList, newTask
+      setIsModalOpen,
+      list,
+      setList,
+      newTask,
     },
     edit: {
-      title, status, taskToUpdate, setIsModalOpen
-    }
-  }
-  
+      title,
+      status,
+      taskToUpdate,
+      setIsModalOpen,
+    },
+  };
+
   return (
     isModalOpen && (
       <div className="todo-modal" id="modal">
         <div className="modal-content">
           <CloseButton setIsModalOpen={setIsModalOpen} />
           <h2 className="modal-title">{modalTypeMapping[type].title}</h2>
-          <ModalInputField handleInput={setTitle} taskName={type==='edit' && taskToUpdate.title}/>
-          <ModalSelectField handleInput={setStatus} taskStatus={type==='edit' && taskToUpdate.status}/>
+          <ModalInputField
+            handleInput={setTitle}
+            taskName={type === "edit" && taskToUpdate.title}
+          />
+          <ModalSelectField
+            handleInput={setStatus}
+            status={status}
+          />
           <div className="modal-buttons">
             <Button
               text={modalTypeMapping[type].buttonText}
-              handler={() => modalTypeMapping[type].handler({...handlerArguments[type]})}
+              handler={() =>
+                modalTypeMapping[type].handler({ ...handlerArguments[type] })
+              }
               variant="submit"
             />
             <Button

@@ -15,6 +15,7 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("add");
   const [taskId, setTaskId] = useState("");
+  const [status, setStatus] = useState("incomplete");
 
   return (
     <div>
@@ -38,6 +39,8 @@ const App = () => {
         list={list}
         type={modalType}
         taskId={taskId}
+        setStatus={setStatus}
+        status={status}
       />
       <List
         list={list}
@@ -45,6 +48,8 @@ const App = () => {
         setIsModalOpen={setIsModalOpen}
         setModalType={setModalType}
         setTaskId={setTaskId}
+        setStatus={setStatus}
+        status={status}
       />
     </div>
   );
