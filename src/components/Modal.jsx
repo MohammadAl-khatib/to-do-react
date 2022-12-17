@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Button from "./Button";
+import { v4 as uuid } from "uuid";
 
-const ModalInputField = ({ handleInput}) => (
+const ModalInputField = ({ handleInput, taskName }) => (
   <div className="modal-input">
     <label htmlFor="" className="modal-label">
       Title
     </label>
     <input
+      defaultValue={taskName || ""}
       className="modal-input"
       type="text"
       name="title"
@@ -15,7 +17,7 @@ const ModalInputField = ({ handleInput}) => (
   </div>
 );
 
-const ModalSelectField = ({ handleInput}) => (
+const ModalSelectField = ({ handleInput }) => (
   <div className="modal-input">
     <label htmlFor="" className="modal-label">
       Status
@@ -32,41 +34,79 @@ const ModalSelectField = ({ handleInput}) => (
   </div>
 );
 
-const CloseButton = ({setIsModalOpen}) => (
-  <span className="modal-close-button" onClick={() => setIsModalOpen(false)}>x</span>
-)
+const CloseButton = ({ setIsModalOpen }) => (
+  <span
+    className="modal-close-button"
+    onClick={() => {
+      setIsModalOpen(false);
+    }}
+  >
+    x
+  </span>
+);
 
-const Modal = ({ isModalOpen, setIsModalOpen, setList, list }) => {
+const closeModal = (setIsModalOpen) => {
+  setIsModalOpen(false)
+}
+
+const updateTask = ({title, status, taskToUpdate, setIsModalOpen}) => {
+  taskToUpdate.title = title
+  taskToUpdate.status = status
+  closeModal(setIsModalOpen)
+}
+
+const addTask = ({setIsModalOpen, list, setList, newTask}) => {
+  closeModal(setIsModalOpen)
+  setList([newTask].concat(list));
+};
+
+const modalTypeMapping = {
+  add: {
+    title: "add todo",
+    buttonText: "add task",
+    handler: addTask
+  },
+  edit: {
+    title: "update todo",
+    buttonText: "update task",
+    handler: updateTask
+  },
+};
+
+
+const Modal = ({ isModalOpen, setIsModalOpen, setList, list, type, taskId }) => {
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("incomplete");
+  const id = uuid();
 
-  const addTask = () => {
-    const task = {
-      title,
-      status,
-    };
-    setList([task].concat(list));
-  };
+  const taskToUpdate = list.find((task) => task.id === taskId) || {}
+  const newTask = {title, status, id}
 
+  const handlerArguments = {
+    add: {
+      setIsModalOpen, list, setList, newTask
+    },
+    edit: {
+      title, status, taskToUpdate, setIsModalOpen
+    }
+  }
+  
   return (
     isModalOpen && (
       <div className="todo-modal" id="modal">
         <div className="modal-content">
-          <CloseButton setIsModalOpen={setIsModalOpen}/>
-          <h2 className="modal-title">Add TODO</h2>
-          <ModalInputField handleInput={setTitle} />
+          <CloseButton setIsModalOpen={setIsModalOpen} />
+          <h2 className="modal-title">{modalTypeMapping[type].title}</h2>
+          <ModalInputField handleInput={setTitle} taskName={type==='edit' && taskToUpdate.title}/>
           <ModalSelectField handleInput={setStatus} />
           <div className="modal-buttons">
             <Button
-              setIsModalOpen={setIsModalOpen}
-              state={false}
-              text="Add Task"
-              handler={addTask}
+              text={modalTypeMapping[type].buttonText}
+              handler={() => modalTypeMapping[type].handler({...handlerArguments[type]})}
               variant="submit"
             />
             <Button
-              setIsModalOpen={setIsModalOpen}
-              state={false}
+              handler={() => closeModal(setIsModalOpen)}
               text="Cancel"
               variant="cancel"
             />

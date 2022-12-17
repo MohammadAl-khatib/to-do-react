@@ -8,14 +8,100 @@ html {
 
 body {
   margin: 0;
-  font-family: Poppins,sans-serif;
+  font-family: Poppins, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #FFF8E1;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.header {
+  color: #646681;
+  display: inline-block;
+  font-size: 4rem;
+  font-weight: 700;
+  margin: 2rem auto 1.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.container {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.add-and-filter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter {
+  border: none;
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 1.6rem;
+  font-weight: 500;
+  height: auto;
+  overflow: hidden;
+  padding: 1rem;
+  width: 150px;
+  text-decoration: none;
+  text-transform: capitalize;
+  background: #ADA2FF;
+}
+
+.task-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 750px;
+  margin: 20px auto 0;
+  padding: 2rem;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #C0DEFF;
+
+  input[type='checkbox'] {
+    width: 25px;
+    aspect-ratio: 1;
+  }
+
+  &:nth-child(even) {
+    background-color: #f5a8cc;
+  }
+}
+
+.task {
+  display: flex;
+
+  h4 {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.task-details {
+  align-self: center;
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.task-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-container {
+  padding: 0.5rem;
+  background-color: #eee;
+  border-radius: 10%;
+}
+
+.icon {
+  width: 2em;
+  height: 2em;
+  cursor: pointer;
 }
 
 .todo-modal {
@@ -43,8 +129,6 @@ code {
   flex-direction: column;
   gap: 20px;
   border-radius: 8px;
-  transform: scale(1);
-  display: none;
 }
 
 .modal-close-button {
@@ -57,9 +141,9 @@ code {
   top: -10px;
   transform: translateY(-100%);
   cursor: pointer;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 
-  &:hover{
+  &:hover {
     background-color: #e32525;
     color: white;
   }
@@ -68,7 +152,8 @@ code {
 .modal-input {
   width: 100%;
 
-  input, select {
+  input,
+  select {
     padding: 1rem;
     border: none;
     font-size: 2rem;
@@ -94,9 +179,10 @@ code {
   font-weight: 500;
   height: auto;
   overflow: hidden;
-  padding: .8rem 2rem;
+  padding: 0.8rem 2rem;
   text-decoration: none;
   text-transform: capitalize;
+  align-self: center;
 
   &.cancel {
     background: #cccdde;

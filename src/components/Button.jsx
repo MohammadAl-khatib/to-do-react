@@ -1,12 +1,15 @@
 import React from "react";
 
-const Button = ({ setIsModalOpen,  state, text, handler, variant}) => {
+const Button = ({ text, handler, variant }) => {
   const openModal = () => {
-    handler && handler()
-    setIsModalOpen(state);
+    handler();
   };
 
-  return <div onClick={openModal} className={`button ${variant}`}>{text}</div>;
+  return (
+    <div onClick={openModal} className={`button ${variant}`}>
+      {text}
+    </div>
+  );
 };
 
 export default Button;
