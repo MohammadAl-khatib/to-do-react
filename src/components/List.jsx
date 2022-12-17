@@ -17,14 +17,14 @@ const List = ({ list, setList, setIsModalOpen, setModalType, setTaskId }) => {
   return (
     !!list.length && (
       <div>
-        {list.map(({ title, id }) => {
+        {list.map(({ title, id, date }) => {
           return (
             <div key={id} className="task-container">
               <div className="task">
                 <input type="checkbox" />
                 <div className="task-details">
                   <h4>{title}</h4>
-                  <span>{Date.now()}</span>
+                  <span>{date}</span>
                 </div>
               </div>
               <div className="task-buttons">

@@ -73,6 +73,7 @@ const modalTypeMapping = {
   },
 };
 
+const getFormattedDate = (date) => new Date(date).toDateString()
 
 const Modal = ({ isModalOpen, setIsModalOpen, setList, list, type, taskId }) => {
   const [title, setTitle] = useState("");
@@ -80,7 +81,7 @@ const Modal = ({ isModalOpen, setIsModalOpen, setList, list, type, taskId }) => 
   const id = uuid();
 
   const taskToUpdate = list.find((task) => task.id === taskId) || {}
-  const newTask = {title, status, id}
+  const newTask = {title, status, id, date: getFormattedDate(Date.now())}
 
   const handlerArguments = {
     add: {
