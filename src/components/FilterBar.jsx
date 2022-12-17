@@ -2,7 +2,11 @@ import React from 'react'
 
 const FilterBar =() => {
   return (
-    <div>FilterBar</div>
+    <select className='filter'>
+      <option value="all">all</option>
+      <option value="incomplete" defaultValue>incomplete</option>
+      <option value="completed">completed</option>
+    </select>
   )
 }
 

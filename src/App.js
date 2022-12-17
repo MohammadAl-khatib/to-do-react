@@ -5,21 +5,47 @@ import FilterBar from "./components/FilterBar";
 import List from "./components/List";
 import Modal from "./components/Modal";
 
+const openModal = (setModalType, setIsModalOpen) => {
+  setModalType("add");
+  setIsModalOpen(true);
+};
+
 const App = () => {
   const [list, setList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("add");
+  const [taskId, setTaskId] = useState("");
+
   return (
     <div>
       <Header />
-      <Button setIsModalOpen={setIsModalOpen} state={true} text="Add Task" />
+      <div className="container">
+        <div className="add-and-filter">
+          <Button
+            setIsModalOpen={setIsModalOpen}
+            state={true}
+            text="Add Task"
+            variant="submit"
+            handler={() => openModal(setModalType, setIsModalOpen)}
+          />
+          <FilterBar />
+        </div>
+      </div>
       <Modal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         setList={setList}
         list={list}
+        type={modalType}
+        taskId={taskId}
       />
-      <FilterBar />
-      <List list={list} />
+      <List
+        list={list}
+        setList={setList}
+        setIsModalOpen={setIsModalOpen}
+        setModalType={setModalType}
+        setTaskId={setTaskId}
+      />
     </div>
   );
 };
