@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Button from "./components/Button";
 import FilterBar from "./components/FilterBar";
 import List from "./components/List";
 import Modal from "./components/Modal";
+import createList from "./utils/createList";
 
 const openModal = (setModalType, setIsModalOpen) => {
   setModalType("add");
@@ -18,7 +19,12 @@ const App = () => {
   const [status, setStatus] = useState("incomplete");
   const [filterQUery, setFilterQuery] = useState("all");
   const filteredList = JSON.parse(localStorage.list || '[]').filter((task) =>filterQUery === 'all'? list : task.status === filterQUery)
+ 
 
+  useEffect(() => {
+    createList(setList, filteredList)
+  }, [])
+  
   return (
     <div>
       <Header />

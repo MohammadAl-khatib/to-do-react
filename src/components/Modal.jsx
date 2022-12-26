@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import { v4 as uuid } from "uuid";
+import createList from "../utils/createList";
 
 const ModalInputField = ({ handleInput, taskName }) => (
   <div className="modal-input">
@@ -52,16 +53,23 @@ const closeModal = (setIsModalOpen) => {
   setIsModalOpen(false);
 };
 
-const updateTask = ({ title, status, taskToUpdate, setIsModalOpen }) => {
+const updateTask = ({
+  title,
+  status,
+  taskToUpdate,
+  setIsModalOpen,
+  setList,
+  list,
+}) => {
   taskToUpdate.title = title;
   taskToUpdate.status = status;
+  createList(setList, [...list]);
   closeModal(setIsModalOpen);
 };
 
 const addTask = ({ setIsModalOpen, list, setList, newTask }) => {
   closeModal(setIsModalOpen);
-  setList([newTask].concat(list));
-  localStorage.list = JSON.stringify([newTask].concat(list));
+  createList(setList, [newTask].concat(list))
 };
 
 const modalTypeMapping = {
@@ -87,13 +95,19 @@ const Modal = ({
   type,
   taskId,
   status,
-  setStatus
+  setStatus,
 }) => {
-  
   const taskToUpdate = list.find((task) => task.id === taskId) || {};
   const [title, setTitle] = useState("");
   const id = uuid();
   const newTask = { title, status, id, date: getFormattedDate(Date.now()) };
+
+  useEffect(() => {
+    if (type === "edit") {
+      setTitle(taskToUpdate.title);
+      setStatus(taskToUpdate.status);
+    }
+  }, [list, setStatus, taskId, taskToUpdate.status, taskToUpdate.title, type]);
 
   const handlerArguments = {
     add: {
@@ -107,6 +121,8 @@ const Modal = ({
       status,
       taskToUpdate,
       setIsModalOpen,
+      setList,
+      list,
     },
   };
 
@@ -120,16 +136,13 @@ const Modal = ({
             handleInput={setTitle}
             taskName={type === "edit" && taskToUpdate.title}
           />
-          <ModalSelectField
-            handleInput={setStatus}
-            status={status}
-          />
+          <ModalSelectField handleInput={setStatus} status={taskToUpdate.status}/>
           <div className="modal-buttons">
             <Button
               text={modalTypeMapping[type].buttonText}
-              handler={() =>
-                modalTypeMapping[type].handler({ ...handlerArguments[type] })
-              }
+              handler={() => {
+                modalTypeMapping[type].handler({ ...handlerArguments[type] });
+              }}
               variant="submit"
             />
             <Button
