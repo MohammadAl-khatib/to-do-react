@@ -1,10 +1,11 @@
 import React from "react";
 import { ReactComponent as TrashIcon } from "../assets/icons/trash.svg";
 import { ReactComponent as PenIcon } from "../assets/icons/pen.svg";
+import createList from "../utils/createList";
 
 const removeTask = (setList, list, id) => {
   const newList = list.filter((task) => task.id !== id);
-  setList(newList);
+  createList(setList, newList)
 };
 
 const updateTask = (setIsModalOpen, setModalType, setTaskId, taskId) => {
@@ -16,7 +17,7 @@ const updateTask = (setIsModalOpen, setModalType, setTaskId, taskId) => {
 const handleCheckBox = (checked, item, list, setList, setStatus) => {
   item.status = checked ? "completed" : "incomplete";
   setStatus(checked ? "completed" : "incomplete")
-  setList([...list]);
+  createList(setList, [...list])
 };
 
 const List = ({ list, setList, setIsModalOpen, setModalType, setTaskId,

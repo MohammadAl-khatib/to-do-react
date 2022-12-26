@@ -16,6 +16,8 @@ const App = () => {
   const [modalType, setModalType] = useState("add");
   const [taskId, setTaskId] = useState("");
   const [status, setStatus] = useState("incomplete");
+  const [filterQUery, setFilterQuery] = useState("all");
+  const filteredList = JSON.parse(localStorage.list || '[]').filter((task) =>filterQUery === 'all'? list : task.status === filterQUery)
 
   return (
     <div>
@@ -29,7 +31,7 @@ const App = () => {
             variant="submit"
             handler={() => openModal(setModalType, setIsModalOpen)}
           />
-          <FilterBar />
+          <FilterBar setFilterQuery={setFilterQuery}/>
         </div>
       </div>
       <Modal
@@ -43,7 +45,7 @@ const App = () => {
         status={status}
       />
       <List
-        list={list}
+        list={filteredList}
         setList={setList}
         setIsModalOpen={setIsModalOpen}
         setModalType={setModalType}
