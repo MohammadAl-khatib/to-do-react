@@ -61,6 +61,7 @@ const updateTask = ({ title, status, taskToUpdate, setIsModalOpen }) => {
 const addTask = ({ setIsModalOpen, list, setList, newTask }) => {
   closeModal(setIsModalOpen);
   setList([newTask].concat(list));
+  localStorage.list = JSON.stringify([newTask].concat(list));
 };
 
 const modalTypeMapping = {
